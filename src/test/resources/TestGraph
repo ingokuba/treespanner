@@ -1,0 +1,19 @@
+Graph mygraph {
+	// Node-IDs
+	A = 5;
+	B = 1;
+	C = 3;
+	D = 7;
+	E = 6;
+	F = 4;
+	
+	// Links und zugeh. Kosten
+	A - B : 10;
+	A - C : 10;
+	B - D : 15;
+	B - E : 10;
+	C - D : 3;
+	C - E : 10;
+	D - F : 10;
+	E - F : 2;
+}
