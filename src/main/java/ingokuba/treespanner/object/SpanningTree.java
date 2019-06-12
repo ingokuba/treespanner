@@ -2,31 +2,14 @@ package ingokuba.treespanner.object;
 
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class SpanningTree
 {
 
     private Node       root;
     private List<Link> links;
-
-    public Node getRoot()
-    {
-        return root;
-    }
-
-    public void setRoot(Node root)
-    {
-        this.root = root;
-    }
-
-    public List<Link> getLinks()
-    {
-        return links;
-    }
-
-    public void setLinks(List<Link> links)
-    {
-        this.links = links;
-    }
 
     @Override
     public String toString()
