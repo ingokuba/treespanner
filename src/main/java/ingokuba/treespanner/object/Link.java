@@ -1,32 +1,39 @@
 package ingokuba.treespanner.object;
 
-public class Link {
-	private String[] nodes;
-	private Integer cost;
+public class Link
+{
 
-	public String[] getNodes() {
-		return nodes;
-	}
+    private String[] nodes;
+    private Integer  cost;
 
-	public void setNodes(String[] nodes) {
-		if (nodes.length != 2) {
-			throw new IllegalArgumentException("Link has to contain two node names.");
-		}
-		this.nodes = nodes;
-	}
+    public String[] getNodes()
+    {
+        return nodes;
+    }
 
-	public Integer getCost() {
-		return cost;
-	}
+    public void setNodes(String[] nodes)
+    {
+        if (nodes.length != 2) {
+            throw new IllegalArgumentException("Link has to contain two node names.");
+        }
+        this.nodes = nodes;
+    }
 
-	public void setCost(Integer cost) {
-		this.cost = cost;
-	}
+    public Integer getCost()
+    {
+        return cost;
+    }
 
-	public String getNode(int index) {
-		if (index != 0 && index != 1) {
-			throw new IllegalArgumentException("Index has to be 0 or 1.");
-		}
-		return nodes[index];
-	}
+    public void setCost(Integer cost)
+    {
+        this.cost = cost;
+    }
+
+    public String getNode(int index)
+    {
+        if (index != 0 && index != 1) {
+            throw new IllegalArgumentException("Index has to be 0 or 1.");
+        }
+        return nodes[index];
+    }
 }
