@@ -3,6 +3,9 @@ package ingokuba.treespanner.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class Graph
 {
 
@@ -10,42 +13,12 @@ public class Graph
     private List<Link> links;
     private Node       root;
 
-    public Node getRoot()
-    {
-        return root;
-    }
-
-    public void setRoot(Node root)
-    {
-        this.root = root;
-    }
-
-    public List<Link> getLinks()
-    {
-        return links;
-    }
-
-    public void setLinks(List<Link> links)
-    {
-        this.links = links;
-    }
-
     public void addLink(Link link)
     {
         if (links == null) {
             links = new ArrayList<>();
         }
         links.add(link);
-    }
-
-    public List<Node> getNodes()
-    {
-        return nodes;
-    }
-
-    public void setNodes(List<Node> nodes)
-    {
-        this.nodes = nodes;
     }
 
     /**

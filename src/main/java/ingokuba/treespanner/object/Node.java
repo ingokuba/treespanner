@@ -1,50 +1,23 @@
 package ingokuba.treespanner.object;
 
+import lombok.Data;
+
+@Data
 public class Node
 {
 
     private String  name;
     private Integer id;
     private Node    nextHop;
-    private int     msgCnt;
+    private int     messageCount = 0;
 
-    public String getName()
+    /**
+     * Increment the message count.
+     * 
+     * @return New message count
+     */
+    public int increaseMessageCount()
     {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public Integer getId()
-    {
-        return id;
-    }
-
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
-    public Node getNextHop()
-    {
-        return nextHop;
-    }
-
-    public void setNextHop(Node nextHop)
-    {
-        this.nextHop = nextHop;
-    }
-
-    public int getMsgCnt()
-    {
-        return msgCnt;
-    }
-
-    public void setMsgCnt(int msgCnt)
-    {
-        this.msgCnt = msgCnt;
+        return messageCount++;
     }
 }
