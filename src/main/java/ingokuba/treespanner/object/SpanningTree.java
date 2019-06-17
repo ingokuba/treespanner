@@ -14,9 +14,9 @@ public class SpanningTree
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("Root: " + root.getName() + "; ");
+        StringBuilder builder = new StringBuilder("Root: " + root.getName() + ";\n");
         for (Link link : links) {
-            builder.append(link.getNode(0) + " - " + link.getNode(1) + "; ");
+            builder.append(link.getNode(0) + " - " + link.getNode(1) + ";\n");
         }
         return builder.toString();
     }
