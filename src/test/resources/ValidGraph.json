@@ -1,4 +1,5 @@
 {
+	"name": "mygraph",
 	"nodes": [
 		{
 			"name": "A",
@@ -18,7 +19,7 @@
 		},
 		{
 			"name": "E",
-			"id": 6
+			"id": 4
 		},
 		{
 			"name": "F",
@@ -45,7 +46,7 @@
 				"B",
 				"D"
 			],
-			"cost": 15
+			"cost": 5
 		},
 		{
 			"nodes": [

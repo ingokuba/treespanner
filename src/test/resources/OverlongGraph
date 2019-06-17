@@ -4,16 +4,17 @@ Graph mygraph {
 	B = 1;
 	C = 3;
 	D = 7;
-	E = 4;
+	E = 6;
 	F = 4;
-	
-B - D : 5;
-	B - E : 10;
-	C - D : 3;
+	G = 4;
+	A - G : 3;
 	
 	// Links und zugeh. Kosten
 	A - B : 10;
 	A - C : 10;
+	B - D : 5;
+	B - E : 10;
+	C - D : 3;
 	C - E : 10;
 	D - F : 10;
 	E - F : 2;
