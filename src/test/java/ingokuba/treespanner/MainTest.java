@@ -85,58 +85,16 @@ public class MainTest
     }
 
     @Test
-    public void should_fail_check_for_duplicate_node_name()
+    public void should_fail_for_file_too_long()
     {
-        String path = getClass().getClassLoader().getResource("DuplicateName.json").getPath();
+        String path = getClass().getClassLoader().getResource("OverlongGraph").getPath();
         String[] args = {path, DEFAULT_PDU};
 
         try {
             Main.main(args);
             fail();
         } catch (TreespannerException e) {
-            assertThat(e.getMessage(), containsString("name 'A' is not unique"));
-        }
-    }
-
-    @Test
-    public void should_fail_check_for_duplicate_node_id()
-    {
-        String path = getClass().getClassLoader().getResource("DuplicateId.json").getPath();
-        String[] args = {path, DEFAULT_PDU};
-
-        try {
-            Main.main(args);
-            fail();
-        } catch (TreespannerException e) {
-            assertThat(e.getMessage(), containsString("id '1' is not unique"));
-        }
-    }
-
-    @Test
-    public void should_fail_check_for_self_reference()
-    {
-        String path = getClass().getClassLoader().getResource("SelfReference.json").getPath();
-        String[] args = {path, DEFAULT_PDU};
-
-        try {
-            Main.main(args);
-            fail();
-        } catch (TreespannerException e) {
-            assertThat(e.getMessage(), containsString("references itself"));
-        }
-    }
-
-    @Test
-    public void should_fail_check_for_invalid_link()
-    {
-        String path = getClass().getClassLoader().getResource("InvalidLink.json").getPath();
-        String[] args = {path, DEFAULT_PDU};
-
-        try {
-            Main.main(args);
-            fail();
-        } catch (TreespannerException e) {
-            assertThat(e.getMessage(), containsString("doesn't exist"));
+            assertThat(e.getMessage(), containsString("Line count is greater than"));
         }
     }
 }

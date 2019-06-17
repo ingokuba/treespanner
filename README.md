@@ -17,3 +17,11 @@ Example:
 
 - Default: file should have no ending or end with `.custom`
 - Json: file should end with `.json`
+
+### Configuration
+
+in `Treespanner.properties`:
+- `MAX_ITEMS`: Maximum amount of lines in the input file
+- `MAX_IDENT`: Maxmimum length for identifiers (graph and node names)
+- `MAX_COST`: Value range of the edge weights (costs): 0 ... `MAX_COST`
+- `MAX_NODE_ID`: Value range of the node weights (Node ID): 1 ... `MAX_NODE_ID`

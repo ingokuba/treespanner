@@ -1,8 +1,10 @@
 package ingokuba.treespanner.object;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class Node
 {
 

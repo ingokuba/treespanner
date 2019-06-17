@@ -1,16 +1,18 @@
 package ingokuba.treespanner.reader;
 
+import static ingokuba.treespanner.Config.config;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ingokuba.treespanner.Config;
+import ingokuba.treespanner.TreespannerException;
 import ingokuba.treespanner.object.Graph;
 import ingokuba.treespanner.object.Link;
 import ingokuba.treespanner.object.Node;
@@ -19,29 +21,72 @@ public class CustomReader
     implements GraphReader
 {
 
-    private static final Logger LOGGER = Logger.getLogger(CustomReader.class.getName());
+    private static final String INVALID_LINE_SEQUENCE = "Invalid line sequence.";
+    private static final String GRAPH_NAME_REGEX      = "[a-zA-Z][a-zA-Z0-9]*";
+    private static final String NODE_NAME_REGEX       = "[A-Z][a-zA-Z]*";
 
     @Override
     public Graph read(Path path)
+        throws TreespannerException
     {
         try (BufferedReader reader = Files.newBufferedReader(path)) {
+            final Integer MAX_ITEMS = config().getProperty(Config.MAX_ITEMS, Integer.class);
             Graph graph = new Graph();
+            boolean started = false;
             String line;
+            int i = 0;
             while ((line = reader.readLine()) != null) {
-                if (line.matches("\\s*[A-Z][a-zA-Z]*\\s*=\\s*[0-9]*\\s*;\\s*")) {
+                i++;
+                if (MAX_ITEMS != null && i > MAX_ITEMS) {
+                    throw new TreespannerException("Line count is greater than %d", MAX_ITEMS);
+                }
+                if (line.matches("\\s*Graph\\s*" + GRAPH_NAME_REGEX + "\\s*\\{\\s*")) {
+                    if (started) {
+                        throw new TreespannerException(INVALID_LINE_SEQUENCE);
+                    }
+                    // graph name
+                    graph.setName(getGraphName(line));
+                    started = true;
+                }
+                if (line.matches("\\s*" + NODE_NAME_REGEX + "\\s*=\\s*[0-9]*\\s*;\\s*")) {
+                    if (!started) {
+                        throw new TreespannerException(INVALID_LINE_SEQUENCE);
+                    }
                     // node
                     graph.addNode(getNode(line));
                 }
-                else if (line.matches("\\s*[A-Z][a-zA-Z]*\\s*-\\s*[A-Z][a-zA-Z]*\\s*:\\s*[0-9]*\\s*;\\s*")) {
+                if (line.matches("\\s*" + NODE_NAME_REGEX + "\\s*-\\s*" + NODE_NAME_REGEX + "\\s*:\\s*[0-9]*\\s*;\\s*")) {
+                    if (!started) {
+                        throw new TreespannerException(INVALID_LINE_SEQUENCE);
+                    }
                     // link
                     graph.addLink(getLink(line));
+                }
+                if (line.matches("\\s*\\}\\s*")) {
+                    if (!started) {
+                        throw new TreespannerException(INVALID_LINE_SEQUENCE);
+                    }
+                    break;
                 }
             }
             return graph;
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Could not read from file '" + path + "'", e);
-            return null;
+            throw new TreespannerException("Could not read from file '%s'", path);
         }
+    }
+
+    /**
+     * Graph name in a line like:
+     * 
+     * <pre>
+     * Graph {name} {
+     * </pre>
+     */
+    private String getGraphName(String string)
+    {
+        Pattern namePattern = Pattern.compile(GRAPH_NAME_REGEX);
+        Matcher nameMatcher = namePattern.matcher(string);
+        return nameMatcher.find() ? nameMatcher.group(0) : null;
     }
 
     /**
@@ -55,7 +100,7 @@ public class CustomReader
     {
         Node node = new Node();
         // name
-        Pattern namePattern = Pattern.compile("[A-Z][a-zA-Z]*");
+        Pattern namePattern = Pattern.compile(NODE_NAME_REGEX);
         Matcher nameMatcher = namePattern.matcher(string);
         if (nameMatcher.find()) {
             String name = nameMatcher.group(0);
@@ -82,7 +127,7 @@ public class CustomReader
     {
         Link link = new Link();
         // nodes
-        Pattern namePattern = Pattern.compile("[A-Z][a-zA-Z]*");
+        Pattern namePattern = Pattern.compile(NODE_NAME_REGEX);
         Matcher nameMatcher = namePattern.matcher(string);
         List<String> nodes = new ArrayList<>();
         while (nameMatcher.find()) {
