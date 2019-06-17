@@ -1,16 +1,15 @@
 package ingokuba.treespanner;
 
 import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.WARNING;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 import ingokuba.treespanner.object.SpanningTree;
-import ingokuba.treespanner.parser.CustomReader;
-import ingokuba.treespanner.parser.GraphReader;
-import ingokuba.treespanner.parser.JsonReader;
+import ingokuba.treespanner.reader.CustomReader;
+import ingokuba.treespanner.reader.GraphReader;
+import ingokuba.treespanner.reader.JsonReader;
 
 public class Main
 {
@@ -18,31 +17,41 @@ public class Main
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args)
+        throws TreespannerException
     {
+        if (args.length != 2) {
+            throw new TreespannerException("Number of arguments is %d, but should be 2.", args.length);
+        }
         String fileName = args[0];
         Path path = Paths.get(fileName);
         FileType fileType = getFileExtension(path.getFileName().toString());
-        GraphReader reader = null;
+        GraphReader reader = getReader(fileType);
+        if (reader == null) {
+            throw new TreespannerException("Reader could not be found for file type %s.", fileType);
+        }
+        int minPDU = Integer.parseInt(args[1]);
+        if (minPDU < 0) {
+            throw new TreespannerException("Minimum PDUs must be greater than 0, but was %d.", minPDU);
+        }
+        SpanningTree tree = new TreeSpanner(reader.read(path)).getSpanningTree(minPDU);
+        LOGGER.log(FINE, "Spanning tree: {0}", tree);
+    }
+
+    /**
+     * Get the reader for a specific file type.
+     * 
+     * @param fileType of the file to read
+     * @return {@link GraphReader} for the file or null, if unsupported
+     */
+    private static GraphReader getReader(FileType fileType)
+    {
         switch (fileType) {
         case JSON:
-            reader = new JsonReader();
-            break;
+            return new JsonReader();
         case CUSTOM:
-            reader = new CustomReader();
-            break;
-        case UNKNOWN:
-            LOGGER.log(WARNING, "File type is not supported.");
-        }
-        if (reader == null) {
-            LOGGER.log(WARNING, "Reader could not be found for file type {0}.", fileType);
-            return;
-        }
-        SpanningTree tree = new TreeSpanner(reader.read(path)).getSpanningTree();
-        if (tree == null) {
-            LOGGER.log(WARNING, "Could not generate tree.");
-        }
-        else {
-            LOGGER.log(FINE, "Spanning tree: {0}", tree);
+            return new CustomReader();
+        default:
+            return null;
         }
     }
 

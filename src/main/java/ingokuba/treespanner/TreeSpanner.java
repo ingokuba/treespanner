@@ -14,6 +14,7 @@ public class TreeSpanner
     private Graph graph;
 
     public TreeSpanner(Graph graph)
+        throws TreespannerException
     {
         this.graph = graph;
         check();
@@ -24,37 +25,28 @@ public class TreeSpanner
      * 
      * @return The spanning tree object.
      */
-    public SpanningTree getSpanningTree()
+    public SpanningTree getSpanningTree(int minPDU)
     {
-        for (Node node : graph.getNodes()) {
-            findRoot(node);
-        }
         return null;
-    }
-
-    private void findRoot(Node from)
-    {
-
     }
 
     /**
      * Run all checks on the graph.
-     * 
-     * @return
      */
     private void check()
+        throws TreespannerException
     {
         List<Integer> nodeIds = new ArrayList<>();
         List<String> nodeNames = new ArrayList<>();
         for (Node node : graph.getNodes()) {
             // check node id
             if (nodeIds.contains(node.getId())) {
-                throw new IllegalArgumentException("Node id '" + node.getId() + "' is not unique.");
+                throw new TreespannerException("Node id '%d' is not unique.", node.getId());
             }
             nodeIds.add(node.getId());
             // check node name
             if (nodeNames.contains(node.getName())) {
-                throw new IllegalArgumentException("Node name '" + node.getName() + "' is not unique.");
+                throw new TreespannerException("Node name '%s' is not unique.", node.getName());
             }
             nodeNames.add(node.getName());
         }
@@ -62,7 +54,7 @@ public class TreeSpanner
             String nodeName0 = link.getNode(0);
             String nodeName1 = link.getNode(1);
             if (nodeName0.equals(nodeName1)) {
-                throw new IllegalArgumentException("Node " + nodeName0 + " references itself.");
+                throw new TreespannerException("Node '%s' references itself.", nodeName0);
             }
             getNode(nodeName0);
             getNode(nodeName1);
@@ -71,10 +63,11 @@ public class TreeSpanner
     }
 
     private Node getNode(String name)
+        throws TreespannerException
     {
         Node node = graph.getNode(name);
         if (node == null) {
-            throw new IllegalArgumentException("Node with name '" + name + "' doesn't exist.");
+            throw new TreespannerException("Node with name '%s' doesn't exist.", name);
         }
         return node;
     }
