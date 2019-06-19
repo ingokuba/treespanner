@@ -1,10 +1,7 @@
 package ingokuba.treespanner;
 
-import static java.util.logging.Level.FINE;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
 
 import ingokuba.treespanner.object.SpanningTree;
 import ingokuba.treespanner.reader.CustomReader;
@@ -13,8 +10,6 @@ import ingokuba.treespanner.reader.JsonReader;
 
 public class Main
 {
-
-    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args)
         throws TreespannerException
@@ -34,7 +29,7 @@ public class Main
             throw new TreespannerException("Minimum PDUs must be greater than 0, but was %d.", minPDU);
         }
         SpanningTree tree = new TreeSpanner(reader.read(path)).getSpanningTree(minPDU);
-        LOGGER.log(FINE, "Spanning tree: {0}", tree);
+        Output.print(tree.toString());
     }
 
     /**
@@ -48,6 +43,7 @@ public class Main
         switch (fileType) {
         case JSON:
             return new JsonReader();
+        case TXT:
         case CUSTOM:
             return new CustomReader();
         default:

@@ -7,6 +7,10 @@ public enum FileType
      */
     JSON,
     /**
+     * Custom format. Ends with '.txt'
+     */
+    TXT,
+    /**
      * Custom format. Ends with '.custom' or no file extension.
      */
     CUSTOM,
