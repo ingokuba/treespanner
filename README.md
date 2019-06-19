@@ -1,6 +1,6 @@
 # Tree Spanner [![CircleCI](https://circleci.com/gh/ingokuba/treespanner.svg?style=svg)](https://circleci.com/gh/ingokuba/treespanner)
 
-Labor Kommunikationsinformatik: Simulation eines Spanning Tree Protokolls
+:deciduous_tree: Simulation of a spanning tree protocol
 
 ### Executing
 
@@ -15,7 +15,7 @@ Example:
 
 ### Supported file types
 
-- Default: file should have no ending or end with `.custom`
+- Default: file should have no ending or end with `.txt` or `.custom`
 - Json: file should end with `.json`
 
 ### Configuration
